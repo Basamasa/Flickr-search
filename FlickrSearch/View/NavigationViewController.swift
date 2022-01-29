@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  NavigationViewController.swift
 //  FlickrSearch
 //
 //  Created by Anzer Arkin on 28.01.22.
@@ -7,13 +7,9 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class NavigationViewController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
-
-
 }
-
