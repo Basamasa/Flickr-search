@@ -15,7 +15,7 @@ class ViewController: UIViewController {
             
     private var flickrViewModel = FlickrImageViewModel()
     
-    var isSearching: Bool = false
+    private var isSearching: Bool = false
     
     
     override func viewDidLoad() {
@@ -23,21 +23,23 @@ class ViewController: UIViewController {
         
         title = "Flickr search"
         
+        imageCollectionView.delegate = self
+        imageCollectionView.dataSource = self
+        
         configureSearchBar()
         
-        fillData()
+        flickrViewModel.dataUpdated = { [weak self] in
+            print("Updated")
+            self?.imageCollectionView.reloadData()
+        }
     }
     
     private func configureSearchBar() {
         searchController.searchResultsUpdater = self
         navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
         searchController.searchBar.placeholder = "Search your image"
     }
-    
-    private func fillData() {
-//        imageList.append(FlickrImageModel(imageName: "NImabi", imageURL: "1"))
-    }
-
 }
 
 
@@ -49,8 +51,13 @@ extension ViewController: UISearchResultsUpdating, UISearchBarDelegate {
         guard let text = searchController.searchBar.text else {
             return
         }
-        
-        print()
+        if text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return
+        }
+        imageCollectionView.reloadData()
+        flickrViewModel.search(text: text) {
+            print("worked")
+        }
     }
 }
 
@@ -58,18 +65,31 @@ extension ViewController: UISearchResultsUpdating, UISearchBarDelegate {
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imageList.count
+        return flickrViewModel.photos.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = imageCollectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ImageCollectionViewCell
         
-//        cell.ImageLabel.text = imageList[indexPath.row].imageName
-//        cell.ImageView.image = UIImage(named: imageList[indexPath.row].imageURL)
-        
+        cell.ImageLabel.text = flickrViewModel.photos[indexPath.row].title
+        cell.ImageView.image = nil
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let cell = cell as? ImageCollectionViewCell else {
+            return
+        }
+        
+        let model = flickrViewModel.photos[indexPath.row]
+        cell.model = ImageViewModel.init(photo: model)
+        
+        if indexPath.row == (flickrViewModel.photos.count - 10) {
+            flickrViewModel.fetchNextPage {
+                print("Fetched next page")
+            }
+        }
+    }
 }
 
 

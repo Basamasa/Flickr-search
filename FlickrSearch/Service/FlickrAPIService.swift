@@ -50,23 +50,6 @@ class FlickrAPI: NSObject {
     }
 }
 
-enum FlickrRequestConfig {
-    
-    case searchRequest(String, Int)
-    
-    var value: Request? {
-        
-        switch self {
-            
-        case .searchRequest(let searchText, let pageNo):
-//            let urlString = String(format: Routes.baseURL, searchText, pageNo)
-            let urlString = Routes.baseURL
-            let reqConfig = Request.init(requestMethod: .get, urlString: urlString)
-            return reqConfig
-        }
-    }
-}
-
 enum RequestMethod: String {
     case get    = "GET"
     case post   = "POST"

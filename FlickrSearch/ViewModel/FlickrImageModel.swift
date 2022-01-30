@@ -8,7 +8,7 @@
 import UIKit
 
 class FlickrImageViewModel {
-    private(set) var photoArray = [Photo]()
+    private(set) var photos = [Photo]()
     private var searchText = ""
     private var pageNo = 1
     private var totalPageNo = 1
@@ -24,7 +24,7 @@ class FlickrImageViewModel {
                 case .Success(let results):
                     if let result = results {
                         self.totalPageNo = result.pages
-                        self.photoArray.append(contentsOf: result.photo)
+                        self.photos.append(contentsOf: result.photo)
                         self.dataUpdated?()
                     }
                     completion()
@@ -43,7 +43,7 @@ class FlickrImageViewModel {
     
     func search(text: String, completion:@escaping () -> Void) {
         searchText = text
-        photoArray.removeAll()
+        photos.removeAll()
         fetchResults(completion: completion)
     }
     
