@@ -8,7 +8,6 @@
 import Foundation
 
 struct Routes {
-    
     static let per_page = 50
     static var api_key = "136bb4dc9c1ade0aba1c974ac3e866db"
     static var baseURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=" + api_key + "&format=json&nojsoncallback=1&safe_search=1&per_page=\(per_page)&text=%@&page=%ld"
@@ -21,4 +20,20 @@ struct Routes {
         return reqConfig
     }
     
+}
+
+enum Result <T>{
+    case Success(T)
+    case Failure(String)
+    case Error(String)
+}
+
+enum RequestMethod: String {
+    case get    = "GET"
+    case post   = "POST"
+    case put    = "PUT"
+    
+    var value: String {
+        return self.rawValue
+    }
 }

@@ -18,7 +18,6 @@ class FlickrImageViewModel {
     
     private func fetchResults(completion:@escaping () -> Void) {
         FlickrAPI().request(searchText, pageNo: pageNo) { (result) in
-        
             DispatchQueue.main.async {
                 switch result {
                 case .Success(let results):

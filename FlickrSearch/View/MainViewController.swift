@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MainViewController: UIViewController {
 
     private var searchController: UISearchController!
     
@@ -18,6 +18,8 @@ class ViewController: UIViewController {
     private var flickrViewModel = FlickrImageViewModel()
     
     private var isSearching: Bool = false
+    
+    private var searchText: String = ""
     
     
     override func viewDidLoad() {
@@ -51,30 +53,38 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: SuggestedSearch {
-    func didSelectSuggestedSearch(token: UISearchToken) {
-//        if let searchField = navigationItem.searchController?.searchBar.searchTextField {
-//            searchField.insertToken(token, at: 0)
-//
-//            // Hide the suggested searches now that we have a token.
-//            resultsTableController.showSuggestedSearches = false
-//
-//            // Update the search query with the newly inserted token.
-//            updateSearchResults(for: searchController)
-//        }
+// MARK: -Suggested search
+
+extension MainViewController: SuggestedSearch {
+    func didSelectSuggestedSearch(text: String) {
+        if let searchField = navigationItem.searchController?.searchBar.searchTextField {
+            searchText = text
+            searchField.text = searchText
+            // Hide the suggested searches now that we have a token.
+            suggestedTableViewController.showSuggestedSearches = true
+
+            // Update the search query with the newly inserted token.
+            updateSearchResults(for: searchController)
+        }
     }
     
-    func didSelectProduct(product: Product) {
-//        let detailViewController = DetailViewController.detailViewControllerForProduct(product)
-//        navigationController?.pushViewController(detailViewController, animated: true)
+    func setToSuggestedSearches() {
+        if searchController.searchBar.searchTextField.tokens.isEmpty {
+            suggestedTableViewController.showSuggestedSearches = true
+            suggestedTableViewController.tableView.delegate = suggestedTableViewController
+        }
     }
 }
 
 
 // MARK: -Search bar
 
-extension ViewController: UISearchControllerDelegate, UISearchBarDelegate, UISearchResultsUpdating {
+extension MainViewController: UISearchControllerDelegate, UISearchBarDelegate, UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
+        guard let text = searchController.searchBar.text else {return}
+        
+        searchText = text
+        
         if searchController.searchBar.text!.isEmpty {
             // Text is empty, show suggested searches again.
             setToSuggestedSearches()
@@ -83,50 +93,35 @@ extension ViewController: UISearchControllerDelegate, UISearchBarDelegate, UISea
         }
     }
     
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        if searchBar.text!.isEmpty {
-//            // Text is empty, show suggested searches again.
-//            setToSuggestedSearches()
-//        } else {
-//            suggestedTableViewController.showSuggestedSearches = false
-//        }
-//    }
-    
     func presentSearchController(_ searchController: UISearchController) {
         searchController.showsSearchResultsController = true
         setToSuggestedSearches()
     }
     
-    func setToSuggestedSearches() {
-        // Show suggested searches only if we don't have a search token in the search field.
-        if searchController.searchBar.searchTextField.tokens.isEmpty {
-            suggestedTableViewController.showSuggestedSearches = true
-            
-            // We are no longer interested in cell navigating, since we are now showing the suggested searches.
-            suggestedTableViewController.tableView.delegate = suggestedTableViewController
-        }
-    }
-    
-    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        let trimmedText = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        searchText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        guard let text = trimmedText,
-                text.count > 0 else {
+        if searchText.count < 1 {
             return
         }
-        flickrViewModel.search(text: text) {
+        
+        flickrViewModel.search(text: searchText) {
             print("Search worked.")
         }
         
+        let tempoText = searchText
         searchController.searchBar.resignFirstResponder()
+        searchController.isActive = false
+        searchController.searchBar.text = tempoText
+        
+        HistorySearchViewModel.insertHistory(text: tempoText)
     }
 }
 
-// MARK: -Search bar
+// MARK: -Collection view
 
-extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return flickrViewModel.photos.count
     }
