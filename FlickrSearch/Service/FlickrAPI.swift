@@ -10,23 +10,23 @@ import UIKit
 
 class FlickrAPI: NSObject {
     
-    func request(_ searchText: String, pageNo: Int, completion: @escaping (Result<Photos?>) -> Void) {
+    func requestText(_ searchText: String, pageNo: Int, completion: @escaping (Result<Photos?>) -> Void) {
         
         guard let request = Routes.searchRequest(searchText: searchText, pageNo: pageNo) else {
             return
         }
         
-        NetworkManager.shared.request(request) { (result) in
+        RequestManager.shared.request(request) { (result) in
             switch result {
             case .Success(let responseData):
-                if let model = self.processResponse(responseData) {
+                if let model = self.parser(responseData) {
                     if let stat = model.stat, stat.uppercased().contains("OK") {
                         return completion(.Success(model.photos))
                     } else {
-                        return completion(.Failure(NetworkManager.errorMessage))
+                        return completion(.Failure(RequestManager.errorMessage))
                     }
                 } else {
-                    return completion(.Failure(NetworkManager.errorMessage))
+                    return completion(.Failure(RequestManager.errorMessage))
                 }
             case .Failure(let message):
                 return completion(.Failure(message))
@@ -36,7 +36,7 @@ class FlickrAPI: NSObject {
         }
     }
     
-    func processResponse(_ data: Data) -> FlickrAPIResults? {
+    func parser(_ data: Data) -> FlickrAPIResults? {
         do {
             print(data)
             let responseModel = try JSONDecoder().decode(FlickrAPIResults.self, from: data)

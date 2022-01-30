@@ -16,7 +16,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "32"
             endingLineNumber = "32"
-            landmarkName = "fetchFlickrImages(completionHandler:)"
+            landmarkName = "requestText(_:pageNo:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -32,7 +32,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "36"
             endingLineNumber = "36"
-            landmarkName = "fetchFlickrImages(completionHandler:)"
+            landmarkName = "requestText(_:pageNo:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -48,7 +48,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "46"
             endingLineNumber = "46"
-            landmarkName = "parserJSON(data:)"
+            landmarkName = "parser(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -64,56 +64,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "43"
             endingLineNumber = "43"
-            landmarkName = "parserJSON(data:)"
+            landmarkName = "parser(_:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "21ADBBE3-B9D7-439D-89AD-D5CB7F4E435A"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FlickrSearch/Service/FlickrAPI.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "26"
-            endingLineNumber = "26"
-            landmarkName = "fetchFlickrImages(completionHandler:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "21ADBBE3-B9D7-439D-89AD-D5CB7F4E435A - 56b40cc4d7824423"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in FlickrSearch.FlickrAPI.fetchFlickrImages(completionHandler: (Swift.Optional&lt;FlickrSearch.FlickrAPIResults&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "FlickrSearch"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/anzerarkin/Documents/Flickr-search/FlickrSearch/Service/FlickrAPI.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "26"
-                  endingLineNumber = "26"
-                  offsetFromSymbolStart = "552">
-               </Location>
-               <Location
-                  uuid = "21ADBBE3-B9D7-439D-89AD-D5CB7F4E435A - 56b40cc4d7824423"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in FlickrSearch.FlickrAPI.fetchFlickrImages(completionHandler: (Swift.Optional&lt;FlickrSearch.FlickrAPIResults&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "FlickrSearch"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/anzerarkin/Documents/Flickr-search/FlickrSearch/Service/FlickrAPI.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "26"
-                  endingLineNumber = "26"
-                  offsetFromSymbolStart = "596">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -128,7 +80,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "22"
             endingLineNumber = "22"
-            landmarkName = "fetchFlickrImages(completionHandler:)"
+            landmarkName = "requestText(_:pageNo:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -144,7 +96,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "24"
             endingLineNumber = "24"
-            landmarkName = "fetchFlickrImages(completionHandler:)"
+            landmarkName = "requestText(_:pageNo:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

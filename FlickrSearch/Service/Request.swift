@@ -23,11 +23,10 @@ class Request: NSMutableURLRequest {
                 self.httpBody = data
             }
         } catch {
-            
+            print("Json serialization error")
         }
         
         self.httpMethod = requestMethod.value
-        
         self.addValue("application/json", forHTTPHeaderField: "Content-Type")
     }
 }

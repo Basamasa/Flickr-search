@@ -7,9 +7,9 @@
 
 import Foundation
 
-class NetworkManager: NSObject {
+class RequestManager: NSObject {
     
-    static let shared = NetworkManager()
+    static let shared = RequestManager()
     
     static let errorMessage = "Something went wrong, Please try again later"
     static let noInternetConnection = "Please check your Internet connection and try again."
@@ -17,7 +17,7 @@ class NetworkManager: NSObject {
     func request(_ request: Request, completion: @escaping (Result<Data>) -> Void) {
         
         guard (Reachability.currentReachabilityStatus != .notReachable) else {
-            return completion(.Failure(NetworkManager.noInternetConnection))
+            return completion(.Failure(RequestManager.noInternetConnection))
         }
         
         URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
@@ -27,11 +27,11 @@ class NetworkManager: NSObject {
             }
             
             guard let data = data else {
-                return completion(.Failure(error?.localizedDescription ?? NetworkManager.errorMessage))
+                return completion(.Failure(error?.localizedDescription ?? RequestManager.errorMessage))
             }
             
             guard let stringResponse = String(data: data, encoding: String.Encoding.utf8) else {
-                return completion(.Failure(error?.localizedDescription ?? NetworkManager.errorMessage))
+                return completion(.Failure(error?.localizedDescription ?? RequestManager.errorMessage))
             }
             
             print("Respone: \(stringResponse)")
