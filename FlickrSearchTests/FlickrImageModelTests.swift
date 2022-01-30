@@ -6,24 +6,25 @@
 //
 
 import XCTest
+@testable import FlickrSearch
 
-class FlickrImageModelTests: XCTestCase {
+class FlickrAPITests: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
     func testSearchValidText() {
+        // Given
+        let expect = expectation(description: "Returns response")
         
-        let expct = expectation(description: "Returns json response")
-        
+        // When
         FlickrAPI().requestText("dogs", pageNo: 1) { (result) in
             
             switch result {
             case .Success(let results):
                 if results != nil {
                     XCTAssert(true, "Success")
-                    expct.fulfill()
+                    expect.fulfill()
                 } else {
                     XCTFail("No results")
                 }
@@ -34,6 +35,33 @@ class FlickrImageModelTests: XCTestCase {
             }
         }
         
+        // Then
+        waitForExpectations(timeout: 10) { (error) in
+            if let error = error {
+                XCTFail("Error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func testSearchInvalidText() {
+        // Given
+        let expect = expectation(description: "Returns error message")
+        
+        // When
+        FlickrAPI().requestText("", pageNo: 1) { (result) in
+            switch result {
+            case .Success( _):
+                XCTFail("No results")
+            case .Failure( _):
+                XCTAssert(true, "Success")
+                expect.fulfill()
+            case .Error( _):
+                XCTAssert(true, "Success")
+                expect.fulfill()
+            }
+        }
+        
+        // Then
         waitForExpectations(timeout: 10) { (error) in
             if let error = error {
                 XCTFail("Error: \(error.localizedDescription)")
