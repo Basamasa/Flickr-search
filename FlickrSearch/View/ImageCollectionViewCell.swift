@@ -33,7 +33,6 @@ extension UIImageView {
             if url == nil {return}
             self.image = nil
 
-            // check cached image
             if let cachedImage = imageCache.object(forKey: urlString as NSString)  {
                 self.image = cachedImage
                 return
@@ -44,7 +43,6 @@ extension UIImageView {
             activityIndicator.startAnimating()
             activityIndicator.center = self.center
 
-            // if not, download image from url
             URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
                 if error != nil {
                     print(error!)

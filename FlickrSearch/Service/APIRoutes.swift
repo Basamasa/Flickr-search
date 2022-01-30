@@ -15,20 +15,10 @@ struct Routes {
     
     static var imageURL = "https://farm66.static.flickr.com/65535/%@_%@.jpg"
     
-}
-
-enum FlickrRequestConfig {
-    
-    case searchRequest(String, Int)
-    
-    var value: Request? {
-        
-        switch self {
-            
-        case .searchRequest(let searchText, let pageNo):
-            let urlString = String(format: Routes.baseURL, searchText, pageNo)
-            let reqConfig = Request.init(requestMethod: .get, urlString: urlString)
-            return reqConfig
-        }
+    static func searchRequest(searchText: String, pageNo: Int) -> Request? {
+        let urlString = String(format: Routes.baseURL, searchText, pageNo)
+        let reqConfig = Request.init(requestMethod: .get, urlString: urlString)
+        return reqConfig
     }
+    
 }

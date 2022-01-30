@@ -11,25 +11,110 @@ import XCTest
 class FlickrSearchTests: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    func testSearchValidText() {
+        
+        let expct = expectation(description: "Returns json response")
+        
+        FlickrAPI().request("dogs", pageNo: 1) { (result) in
+            
+            switch result {
+            case .Success(let results):
+                if results != nil {
+                    XCTAssert(true, "Success")
+                    expct.fulfill()
+                } else {
+                    XCTFail("No results")
+                }
+            case .Failure(let message):
+                XCTFail(message)
+            case .Error(let error):
+                XCTFail(error)
+            }
+        }
+        
+        waitForExpectations(timeout: 10) { (error) in
+            if let error = error {
+                XCTFail("Error: \(error.localizedDescription)")
+            }
+        }
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    
+    func testValidatePhotoImageURL() {
+        
+        let expct = expectation(description: "Returns all fields to create valid image url")
+        
+        FlickrAPI().request("dogs", pageNo: 1) { (result) in
+            
+            switch result {
+            case .Success(let results):
+                
+                guard let photosCount = results?.photo.count else {
+                    XCTFail("No photos returned")
+                    return
+                }
+                
+                if photosCount > 0 {
+                    XCTAssert(true, "Returned photos")
+                    
+                    // Pick first photo to test image url
+                    let photo = results?.photo.first
+                    
+                    if photo?.farm == nil {
+                        XCTFail("No farm id returned")
+                    }
+                    
+                    if photo?.server == nil {
+                        XCTFail("No server id returned")
+                    }
+                    
+                    if photo?.id == nil {
+                        XCTFail("No photo id returned")
+                    }
+                    
+                    if photo?.secret == nil {
+                        XCTFail("No secret id returned")
+                    }
+                    
+                    XCTAssert(true, "Success")
+                    expct.fulfill()
+                }
+            case .Failure(let message):
+                XCTFail(message)
+            case .Error(let error):
+                XCTFail(error)
+            }
+        }
+        
+        waitForExpectations(timeout: 10) { (error) in
+            if let error = error {
+                XCTFail("Error: \(error.localizedDescription)")
+            }
+        }
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    func testSearchInvalidText() {
+        
+        let expct = expectation(description: "Returns error message")
+        
+        FlickrAPI().request("", pageNo: 1) { (result) in
+            switch result {
+            case .Success( _):
+                XCTFail("No results")
+            case .Failure( _):
+                XCTAssert(true, "Success")
+                expct.fulfill()
+            case .Error( _):
+                XCTAssert(true, "Success")
+                expct.fulfill()
+            }
+        }
+        
+        waitForExpectations(timeout: 10) { (error) in
+            if let error = error {
+                XCTFail("Error: \(error.localizedDescription)")
+            }
         }
     }
 

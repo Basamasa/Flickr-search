@@ -9,9 +9,11 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    private let searchController = UISearchController()
+    private var searchController: UISearchController!
     
     @IBOutlet weak var imageCollectionView: UICollectionView!
+    
+    var suggestedTableViewController: SuggestedTableController!
             
     private var flickrViewModel = FlickrImageViewModel()
     
@@ -35,29 +37,90 @@ class ViewController: UIViewController {
     }
     
     private func configureSearchBar() {
+        suggestedTableViewController = SuggestedTableController()
+        suggestedTableViewController.suggestedSearchDelegate = self
+        
+        searchController = UISearchController(searchResultsController: suggestedTableViewController)
+        searchController.searchBar.placeholder = "Search your image"
+        searchController.delegate = self
+        searchController.searchBar.delegate = self
         searchController.searchResultsUpdater = self
+        
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
-        searchController.searchBar.placeholder = "Search your image"
+    }
+}
+
+extension ViewController: SuggestedSearch {
+    func didSelectSuggestedSearch(token: UISearchToken) {
+//        if let searchField = navigationItem.searchController?.searchBar.searchTextField {
+//            searchField.insertToken(token, at: 0)
+//
+//            // Hide the suggested searches now that we have a token.
+//            resultsTableController.showSuggestedSearches = false
+//
+//            // Update the search query with the newly inserted token.
+//            updateSearchResults(for: searchController)
+//        }
+    }
+    
+    func didSelectProduct(product: Product) {
+//        let detailViewController = DetailViewController.detailViewControllerForProduct(product)
+//        navigationController?.pushViewController(detailViewController, animated: true)
     }
 }
 
 
 // MARK: -Search bar
 
-extension ViewController: UISearchResultsUpdating, UISearchBarDelegate {
-    
+extension ViewController: UISearchControllerDelegate, UISearchBarDelegate, UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        guard let text = searchController.searchBar.text else {
+        if searchController.searchBar.text!.isEmpty {
+            // Text is empty, show suggested searches again.
+            setToSuggestedSearches()
+        } else {
+            suggestedTableViewController.showSuggestedSearches = false
+        }
+    }
+    
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        if searchBar.text!.isEmpty {
+//            // Text is empty, show suggested searches again.
+//            setToSuggestedSearches()
+//        } else {
+//            suggestedTableViewController.showSuggestedSearches = false
+//        }
+//    }
+    
+    func presentSearchController(_ searchController: UISearchController) {
+        searchController.showsSearchResultsController = true
+        setToSuggestedSearches()
+    }
+    
+    func setToSuggestedSearches() {
+        // Show suggested searches only if we don't have a search token in the search field.
+        if searchController.searchBar.searchTextField.tokens.isEmpty {
+            suggestedTableViewController.showSuggestedSearches = true
+            
+            // We are no longer interested in cell navigating, since we are now showing the suggested searches.
+            suggestedTableViewController.tableView.delegate = suggestedTableViewController
+        }
+    }
+    
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        let trimmedText = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        guard let text = trimmedText,
+                text.count > 0 else {
             return
         }
-        if text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            return
-        }
-        imageCollectionView.reloadData()
         flickrViewModel.search(text: text) {
-            print("worked")
+            print("Search worked.")
         }
+        
+        searchController.searchBar.resignFirstResponder()
     }
 }
 

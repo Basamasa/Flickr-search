@@ -13,7 +13,7 @@ class FlickrAPI: NSObject {
     
     func request(_ searchText: String, pageNo: Int, completion: @escaping (Result<Photos?>) -> Void) {
         
-        guard let request = FlickrRequestConfig.searchRequest(searchText, pageNo).value else {
+        guard let request = Routes.searchRequest(searchText: searchText, pageNo: pageNo) else {
             return
         }
         
@@ -117,37 +117,6 @@ class NetworkManager: NSObject {
             return completion(.Success(data))
             
         }.resume()
-    }
-    
-    func downloadImage(_ urlString: String, completion: @escaping (Result<UIImage>) -> Void) {
-        
-        let sessionConfig = URLSessionConfiguration.default
-        let session = URLSession(configuration: sessionConfig)
-        
-        guard let url =  URL.init(string: urlString) else {
-            return completion(.Failure(NetworkManager.errorMessage))
-        }
-        
-        guard (Reachability.currentReachabilityStatus != .notReachable) else {
-            return completion(.Failure(NetworkManager.noInternetConnection))
-        }
-        
-        session.downloadTask(with: url) { (url, reponse, error) in
-            do {
-                guard let url = url else {
-                    return completion(.Failure(NetworkManager.errorMessage))
-                }
-                let data = try Data(contentsOf: url)
-                if let image = UIImage(data: data) {
-                    return completion(.Success(image))
-                } else {
-                    return completion(.Failure(NetworkManager.errorMessage))
-                }
-            } catch {
-                return completion(.Error(NetworkManager.errorMessage))
-            }
-            }.resume()
-        
     }
 }
 
