@@ -16,10 +16,10 @@ class MainViewController: UIViewController {
     var suggestedTableViewController: SuggestedTableController!
             
     private var flickrViewModel = FlickrImageViewModel()
-    
-    private var isSearching: Bool = false
-    
+        
     private var searchText: String = ""
+    
+    private var loading: Bool = false
     
     
     override func viewDidLoad() {
@@ -34,6 +34,7 @@ class MainViewController: UIViewController {
         
         flickrViewModel.dataUpdated = { [weak self] in
             print("Updated")
+            self?.loading = false
             self?.imageCollectionView.reloadData()
         }
     }
@@ -60,10 +61,7 @@ extension MainViewController: SuggestedSearch {
         if let searchField = navigationItem.searchController?.searchBar.searchTextField {
             searchText = text
             searchField.text = searchText
-            // Hide the suggested searches now that we have a token.
             suggestedTableViewController.showSuggestedSearches = true
-
-            // Update the search query with the newly inserted token.
             updateSearchResults(for: searchController)
         }
     }
@@ -106,6 +104,10 @@ extension MainViewController: UISearchControllerDelegate, UISearchBarDelegate, U
             return
         }
         
+        loading = true
+
+        imageCollectionView.reloadData()
+                
         flickrViewModel.search(text: searchText) {
             print("Search worked.")
         }
@@ -115,7 +117,7 @@ extension MainViewController: UISearchControllerDelegate, UISearchBarDelegate, U
         searchController.isActive = false
         searchController.searchBar.text = tempoText
         
-        HistorySearchViewModel.insertHistory(text: tempoText)
+        HistorySearch.insertHistory(text: tempoText)
     }
 }
 
@@ -123,19 +125,31 @@ extension MainViewController: UISearchControllerDelegate, UISearchBarDelegate, U
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if loading {
+            return 30
+        }
         return flickrViewModel.photos.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = imageCollectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ImageCollectionViewCell
         
-        cell.ImageLabel.text = flickrViewModel.photos[indexPath.row].title
-        cell.ImageView.image = nil
+        if loading {
+            cell.ImageLabel.text = ""
+            cell.ImageView.image = UIImage(named: "loadingImage")
+        } else {
+            cell.ImageLabel.text = flickrViewModel.photos[indexPath.row].title
+            cell.ImageView.image = nil
+        }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let cell = cell as? ImageCollectionViewCell else {
+            return
+        }
+        
+        if flickrViewModel.photos.isEmpty {
             return
         }
         

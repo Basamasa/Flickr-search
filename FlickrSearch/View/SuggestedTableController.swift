@@ -24,13 +24,13 @@ class SuggestedTableController: UITableViewController {
     }
     
     func suggestedTitle(fromIndex: Int) -> String {
-        return HistorySearchViewModel.historySearches[fromIndex]
+        return HistorySearch.historySearches[fromIndex]
     }
     
     // MARK: - UITableView
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return showSuggestedSearches ? HistorySearchViewModel.historySearches.count : filteredProducts.count
+        return showSuggestedSearches ? HistorySearch.historySearches.count : filteredProducts.count
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -41,7 +41,7 @@ class SuggestedTableController: UITableViewController {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: "cellID")
 
         if showSuggestedSearches {
-            let suggestedtitle = NSMutableAttributedString(string: HistorySearchViewModel.historySearches[indexPath.row])
+            let suggestedtitle = NSMutableAttributedString(string: HistorySearch.historySearches[indexPath.row])
             suggestedtitle.addAttribute(NSAttributedString.Key.foregroundColor,
                                         value: UIColor.label,
                                         range: NSRange(location: 0, length: suggestedtitle.length))
@@ -71,7 +71,7 @@ class SuggestedTableController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
 
         if showSuggestedSearches {
-            let text = HistorySearchViewModel.historySearches[indexPath.row]
+            let text = HistorySearch.historySearches[indexPath.row]
             suggestedSearchDelegate.didSelectSuggestedSearch(text: text)
         }
     }

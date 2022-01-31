@@ -18,7 +18,7 @@ class FlickrAPITests: XCTestCase {
         let expect = expectation(description: "Returns response")
         
         // When
-        FlickrAPI().requestText("dogs", pageNo: 1) { (result) in
+        FlickrAPI().requestText("Cat", pageNo: 1) { (result) in
             
             switch result {
             case .Success(let results):

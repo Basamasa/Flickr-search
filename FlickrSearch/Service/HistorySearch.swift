@@ -7,7 +7,7 @@
 
 import Foundation
 
-class HistorySearchViewModel {
+class HistorySearch {
     static let historySearchesId = "history-searches"
 
     static var historySearches: [String] {
@@ -27,6 +27,6 @@ class HistorySearchViewModel {
             historySearches.removeLast()
         }
         historySearches.insert(text, at: 0)
-        HistorySearchViewModel.historySearches = historySearches
+        HistorySearch.historySearches = historySearches
     }
 }

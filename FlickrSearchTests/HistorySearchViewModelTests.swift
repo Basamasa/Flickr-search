@@ -15,25 +15,25 @@ class HistorySearchViewModelTests: XCTestCase {
 
     func testHistorySearchesWithSingleInput() {
         // Given
-        HistorySearchViewModel.historySearches = []
+        HistorySearch.historySearches = []
         
         // When
-        HistorySearchViewModel.insertHistory(text: "1")
+        HistorySearch.insertHistory(text: "1")
         
         // Then
-        XCTAssertEqual(HistorySearchViewModel.historySearches, ["1"])
+        XCTAssertEqual(HistorySearch.historySearches, ["1"])
     }
     
     func testHistorySearchesWithMultiInput() {
         // Given
-        HistorySearchViewModel.historySearches = []
+        HistorySearch.historySearches = []
         
         // When
-        HistorySearchViewModel.insertHistory(text: "1")
-        HistorySearchViewModel.insertHistory(text: "2")
-        HistorySearchViewModel.insertHistory(text: "3")
+        HistorySearch.insertHistory(text: "1")
+        HistorySearch.insertHistory(text: "2")
+        HistorySearch.insertHistory(text: "3")
         
         // Then
-        XCTAssertEqual(HistorySearchViewModel.historySearches, ["3", "2", "1"])
+        XCTAssertEqual(HistorySearch.historySearches, ["3", "2", "1"])
     }
 }
