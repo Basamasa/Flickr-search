@@ -11,6 +11,11 @@ An iOS mobile app that uses the Flickr image search API and shows the results in
 <img src="https://user-images.githubusercontent.com/25714024/151715560-b593c4d1-e1b5-47d2-8007-dac7073438ca.png" width="250">
 </p>
 
+## Skeleton loading
+<p float="left">
+  <img src="https://user-images.githubusercontent.com/25714024/151976910-6b6c9bcb-5702-45aa-9260-31c258098592.png" width="250">
+  <img src="https://user-images.githubusercontent.com/25714024/151977359-4d9c80ed-6c4c-44e2-918a-f73339657810.png" width="250">
+</p>
 ## How to build
 
 - Clone the repo and run FlickrSearch.xcodeproj
