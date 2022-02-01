@@ -18,13 +18,13 @@ An iOS mobile app that uses the Flickr image search API and shows the results in
 - The application doesn't uses any third party library
 
 ## Functional Requirements
-- The searched results should be shown in a scrollable view. ☑️
-- The scrollable view should be endless. ☑️
-- The user can see the search history. ☑️
-- Use UIKit only, no SwiftUI. ☑️
+- The searched results should be shown in a scrollable view. ✅
+- The scrollable view should be endless. ✅
+- The user can see the search history. ✅
+- Use UIKit only, no SwiftUI. ✅
 ## Nice to have:
-- Consider how to improve the general user experience with your expertise. ☑️
+- Improve the general user experience with your expertise using skeleton grid ✅
 ## Non-Functional Requirements
-- The implemented features are unit tested. ☑️
-- Errors and edge-cases are considered. ☑️
-- Best practices regarding architecture and code style are considered. ☑️
+- The implemented features are unit tested. ✅
+- Errors and edge-cases are considered. ✅
+- Best practices regarding architecture and code style are considered. ✅
