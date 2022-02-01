@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// Flickr api returned photo
 struct Photo: Codable {
     
     let farm : Int

@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Url request
 class Request: NSMutableURLRequest {
     
     convenience init?(requestMethod: RequestMethod, urlString: String, bodyParams: [String: Any]? = nil) {

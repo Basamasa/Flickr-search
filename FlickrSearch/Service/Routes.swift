@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Api routes for Flickr photos search api method
 struct Routes {
     static let per_page = 50
     static var api_key = "136bb4dc9c1ade0aba1c974ac3e866db"

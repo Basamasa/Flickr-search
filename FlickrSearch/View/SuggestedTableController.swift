@@ -7,11 +7,12 @@
 
 import UIKit
 
-// This protocol helps inform MainTableViewController that a suggested search was selected.
+/// This protocol helps inform MainTableViewController that a suggested search was selected.
 protocol SuggestedSearch: AnyObject {
     func didSelectSuggestedSearch(text: String)
 }
 
+/// Suggested search table controller
 class SuggestedTableController: UITableViewController {
     
     var filteredProducts = [String]()

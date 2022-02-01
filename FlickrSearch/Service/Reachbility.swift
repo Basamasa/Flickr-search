@@ -7,8 +7,8 @@
 
 import SystemConfiguration
 
+/// Reachability status
 class Reachability {
-    
     enum ReachabilityStatus {
         case notReachable
         case reachableViaWWAN

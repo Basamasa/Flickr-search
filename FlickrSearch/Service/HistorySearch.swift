@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Search history database
 class HistorySearch {
     static let historySearchesId = "history-searches"
 

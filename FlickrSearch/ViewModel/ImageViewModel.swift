@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// View model for single image view
 struct ImageViewModel {
 
     let imageURL: String

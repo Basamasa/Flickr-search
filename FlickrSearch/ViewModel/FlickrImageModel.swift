@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// View model for search and fetch images
 class FlickrImageViewModel {
     private(set) var photos = [Photo]()
     private var searchText = ""

@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Api helper that request and parser json results
 class FlickrAPI: NSObject {
     
     func requestText(_ searchText: String, pageNo: Int, completion: @escaping (Result<Photos?>) -> Void) {

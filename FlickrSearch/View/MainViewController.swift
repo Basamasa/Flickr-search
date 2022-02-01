@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// Main controller of the app
 class MainViewController: UIViewController {
 
     private var searchController: UISearchController!

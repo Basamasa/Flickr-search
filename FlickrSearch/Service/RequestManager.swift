@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Request helper that gives results from url request
 class RequestManager: NSObject {
     
     static let shared = RequestManager()
