@@ -14,7 +14,6 @@ class FlickrImageViewModel {
     private var pageNo = 1
     private var totalPageNo = 1
     
-    var showAlert: ((String) -> Void)?
     var dataUpdated: (() -> Void)?
     
     /**
@@ -35,12 +34,10 @@ class FlickrImageViewModel {
                     }
                     completion()
                 case .Failure(let message):
-                    self.showAlert?(message)
+                    print(message)
                     completion()
                 case .Error(let error):
-                    if self.pageNo > 1 {
-                        self.showAlert?(error)
-                    }
+                    print(error)
                     completion()
                 }
             }
