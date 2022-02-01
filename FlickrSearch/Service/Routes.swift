@@ -25,7 +25,7 @@ struct Routes {
      ```
       api_key = "key=%@,pageNo=%ld"
       var request = searchRequest(searchText: "abc", pageNo: 123)
-      print(request)
+      print(request?.mainDocumentURL)
       // key=abc,pageNo=123
      ```
      
