@@ -22,6 +22,12 @@ class HistorySearch {
         }
     }
     
+    /**
+     Insert history searched text into user database
+     
+     - Parameters:
+       - text: History search text
+     */
     static func insertHistory(text: String) {
         var historySearches = historySearches
         if historySearches.count > 9 {

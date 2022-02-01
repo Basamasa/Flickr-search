@@ -15,6 +15,13 @@ class RequestManager: NSObject {
     static let errorMessage = "Something went wrong, Please try again later"
     static let noInternetConnection = "Please check your Internet connection and try again."
     
+    /**
+     Request data from internet
+     
+     - Parameters:
+        - request: Api request
+        - completion: Handler to retrieve result
+     */
     func request(_ request: Request, completion: @escaping (Result<Data>) -> Void) {
         
         guard (Reachability.currentReachabilityStatus != .notReachable) else {

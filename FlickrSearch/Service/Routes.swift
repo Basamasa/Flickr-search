@@ -15,6 +15,22 @@ struct Routes {
     
     static var imageURL = "https://farm66.static.flickr.com/65535/%@_%@.jpg"
     
+    /**
+     Return requested url base on serch text and page number
+     
+     - Parameters:
+       - searchText: Search text
+       - pageNo: Page number
+     
+     ```
+      api_key = "key=%@,pageNo=%ld"
+      var request = searchRequest(searchText: "abc", pageNo: 123)
+      print(request)
+      // key=abc,pageNo=123
+     ```
+     
+     - returns: Request configuration
+     */
     static func searchRequest(searchText: String, pageNo: Int) -> Request? {
         let urlString = String(format: Routes.baseURL, searchText, pageNo)
         let reqConfig = Request.init(requestMethod: .get, urlString: urlString)

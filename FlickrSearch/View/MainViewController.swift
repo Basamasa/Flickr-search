@@ -125,6 +125,24 @@ extension MainViewController: UISearchControllerDelegate, UISearchBarDelegate, U
 // MARK: -Collection view
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    private func loadInCell(cell: ImageCollectionViewCell, text: String, image: UIImage?) {
+        cell.ImageLabel.text = text
+        cell.ImageView.image = image
+    }
+    
+    private func loadImage(cell: ImageCollectionViewCell, index: Int) {
+        if loading {
+            if self.traitCollection.userInterfaceStyle == .dark {
+                loadInCell(cell: cell, text: "", image: UIImage(named: "loadingImageDark"))
+            } else {
+                loadInCell(cell: cell, text: "", image: UIImage(named: "loadingImage"))
+            }
+        } else {
+            loadInCell(cell: cell, text: flickrViewModel.photos[index].title, image: nil)
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if loading {
             return 30
@@ -135,13 +153,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = imageCollectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ImageCollectionViewCell
         
-        if loading {
-            cell.ImageLabel.text = ""
-            cell.ImageView.image = UIImage(named: "loadingImage")
-        } else {
-            cell.ImageLabel.text = flickrViewModel.photos[indexPath.row].title
-            cell.ImageView.image = nil
-        }
+        loadImage(cell: cell, index: indexPath.row)
         return cell
     }
     

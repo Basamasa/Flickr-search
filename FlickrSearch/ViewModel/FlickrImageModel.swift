@@ -17,6 +17,12 @@ class FlickrImageViewModel {
     var showAlert: ((String) -> Void)?
     var dataUpdated: (() -> Void)?
     
+    /**
+     Fetch results with giving search text and page number
+     
+     - Parameters:
+        - completion: Handler to retrieve result
+     */
     private func fetchResults(completion:@escaping () -> Void) {
         FlickrAPI().requestText(searchText, pageNo: pageNo) { (result) in
             DispatchQueue.main.async {
@@ -41,12 +47,25 @@ class FlickrImageViewModel {
         }
     }
     
+    /**
+     Search and fetch results with giving search text
+     
+     - Parameters:
+        - searchText: Search term
+        - completion: Handler to retrieve result
+     */
     func search(text: String, completion:@escaping () -> Void) {
         searchText = text
         photos.removeAll()
         fetchResults(completion: completion)
     }
     
+    /**
+     Fetch next page result when scroll to bottom
+     
+     - Parameters:
+        - completion: Handler to retrieve result
+     */
     func fetchNextPage(completion:@escaping () -> Void) {
         if pageNo < totalPageNo {
             pageNo += 1

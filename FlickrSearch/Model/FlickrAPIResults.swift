@@ -7,7 +7,7 @@
 
 import UIKit
 
-/// Flickr api returned results
+/// Returned results from flickr api
 struct FlickrAPIResults: Codable {
     let photos: Photos?
     let stat: String?

@@ -7,7 +7,7 @@
 
 import UIKit
 
-/// This protocol helps inform MainTableViewController that a suggested search was selected.
+/// Inform MainTableViewController that a suggested search was selected.
 protocol SuggestedSearch: AnyObject {
     func didSelectSuggestedSearch(text: String)
 }
@@ -15,16 +15,16 @@ protocol SuggestedSearch: AnyObject {
 /// Suggested search table controller
 class SuggestedTableController: UITableViewController {
     
-    var filteredProducts = [String]()
+    private var filteredProducts = [String]()
         
     weak var suggestedSearchDelegate: SuggestedSearch?
     
-    func suggestedImage(fromIndex: Int) -> UIImage {
+    private func suggestedImage(fromIndex: Int) -> UIImage {
         let color = UIColor.systemGray
         return (UIImage(systemName: "magnifyingglass.circle.fill")?.withTintColor(color))!
     }
     
-    func suggestedTitle(fromIndex: Int) -> String {
+    private func suggestedTitle(fromIndex: Int) -> String {
         return HistorySearch.historySearches[fromIndex]
     }
     

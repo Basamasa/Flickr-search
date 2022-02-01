@@ -7,7 +7,7 @@
 
 import UIKit
 
-/// Flickr api returned photos
+/// Returned photos from flickr api
 struct Photos: Codable {
     let page: Int
     let pages: Int

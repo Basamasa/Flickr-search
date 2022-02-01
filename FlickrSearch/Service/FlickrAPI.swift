@@ -10,7 +10,14 @@ import UIKit
 
 /// Api helper that request and parser json results
 class FlickrAPI: NSObject {
-    
+    /**
+     Flickr API request using the "flickr.photos.search" method, to get photos based on search text, page Number
+     
+     - Parameters:
+        - searchText: Search term
+        - pageNo: Page number
+        - completion: Handler to retrieve result
+     */
     func requestText(_ searchText: String, pageNo: Int, completion: @escaping (Result<Photos?>) -> Void) {
         
         guard let request = Routes.searchRequest(searchText: searchText, pageNo: pageNo) else {
@@ -37,6 +44,13 @@ class FlickrAPI: NSObject {
         }
     }
     
+    /**
+     Parser(Decoder) for json data
+     
+     - Parameters:
+        - data: Response data from api
+     - Returns: FlickrAPIResults instance
+     */
     func parser(_ data: Data) -> FlickrAPIResults? {
         do {
             print(data)
