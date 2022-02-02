@@ -10,8 +10,6 @@ import UIKit
 /// Cell view for image conllection
 class ImageCollectionViewCell: UICollectionViewCell {
     
-//    @IBOutlet weak var imageView: UIImageView!
-//    @IBOutlet weak var imageLa bel: UILabel!
     var imageView = UIImageView()
     static let identifer = "ImageCollectionViewCell"
     
@@ -44,7 +42,6 @@ class ImageCollectionViewCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-//        fatalError("init(coder:) has not been implemented")
     }
     
 }

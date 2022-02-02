@@ -46,7 +46,6 @@ class MainViewController: UIViewController {
     private func setUpCollectionView() {
         let mosaicLayout = MosaicLayout()
         imageCollectionView.collectionViewLayout = mosaicLayout
-//        imageCollectionView.backgroundColor = UIColor.appBackgroundColor
         imageCollectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         imageCollectionView.alwaysBounceVertical = true
         imageCollectionView.indicatorStyle = .white
@@ -125,6 +124,7 @@ extension MainViewController: UISearchControllerDelegate, UISearchBarDelegate, U
         }
 
         imageCollectionView.reloadData()
+        imageCollectionView.setContentOffset(CGPoint.zero, animated: false)
                 
         flickrViewModel.search(text: searchedText) {
             print("Search worked.")
