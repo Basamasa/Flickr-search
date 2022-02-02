@@ -20,6 +20,8 @@ class MainViewController: UIViewController {
         
     private var searchText: String = ""
     
+    private var preLoadingNumber: Int = 30
+    
     private var loading: Bool = false
     
     
@@ -99,26 +101,25 @@ extension MainViewController: UISearchControllerDelegate, UISearchBarDelegate, U
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        searchText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        loading = true
         
-        if searchText.count < 1 {
+        let searchedText = searchText.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: " ", with: "+")
+        
+        if searchedText.count < 1 {
             return
         }
-        
-        loading = true
 
         imageCollectionView.reloadData()
                 
-        flickrViewModel.search(text: searchText) {
+        flickrViewModel.search(text: searchedText) {
             print("Search worked.")
         }
         
-        let tempoText = searchText
+        let tempText = searchText
         searchController.searchBar.resignFirstResponder()
         searchController.isActive = false
-        searchController.searchBar.text = tempoText
-        
-        HistorySearch.insertHistory(text: tempoText)
+        searchController.searchBar.text = tempText
+        HistorySearch.insertHistory(text: tempText)
     }
 }
 
@@ -145,7 +146,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if loading {
-            return 30
+            return preLoadingNumber
         }
         return flickrViewModel.photos.count
     }
