@@ -43,8 +43,8 @@ An iOS mobile app that uses the Flickr image search API and shows the results in
 - The user can see the search history. ✅
 - Use UIKit only, no SwiftUI. ✅
 ## Nice to have:
-- Improve the general user experience with your expertise using skeleton grid ✅
+- Improve the general user experience with your expertise (With skeleton preloading and customized layout) ✅
 ## Non-Functional Requirements
 - The implemented features are unit tested. ✅
 - Errors and edge-cases are considered. ✅
-- Best practices regarding architecture and code style are considered. ✅
+- Best practices regarding architecture and code style are considered (MVVM). ✅
