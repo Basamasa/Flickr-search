@@ -24,7 +24,6 @@ class MainViewController: UIViewController {
     
     private var loading: Bool = false
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -33,7 +32,9 @@ class MainViewController: UIViewController {
         imageCollectionView.delegate = self
         imageCollectionView.dataSource = self
         
-        configureSearchBar()
+        setUpSearchBar()
+        
+        setUpCollectionView()
         
         flickrViewModel.dataUpdated = { [weak self] in
             print("Updated")
@@ -42,7 +43,21 @@ class MainViewController: UIViewController {
         }
     }
     
-    private func configureSearchBar() {
+    private func setUpCollectionView() {
+        let mosaicLayout = MosaicLayout()
+        imageCollectionView.collectionViewLayout = mosaicLayout
+//        imageCollectionView.backgroundColor = UIColor.appBackgroundColor
+        imageCollectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        imageCollectionView.alwaysBounceVertical = true
+        imageCollectionView.indicatorStyle = .white
+        imageCollectionView.delegate = self
+        imageCollectionView.dataSource = self
+        imageCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: ImageCollectionViewCell.identifer)
+        
+        self.view.addSubview(imageCollectionView)
+    }
+    
+    private func setUpSearchBar() {
         suggestedTableViewController = SuggestedTableController()
         suggestedTableViewController.suggestedSearchDelegate = self
         
@@ -128,8 +143,7 @@ extension MainViewController: UISearchControllerDelegate, UISearchBarDelegate, U
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     private func loadInCell(cell: ImageCollectionViewCell, text: String, image: UIImage?) {
-        cell.ImageLabel.text = text
-        cell.ImageView.image = image
+        cell.imageView.image = image
     }
     
     private func loadImage(cell: ImageCollectionViewCell, index: Int) {
@@ -152,7 +166,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = imageCollectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ImageCollectionViewCell
+        let cell = imageCollectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifer, for: indexPath) as! ImageCollectionViewCell
         
         loadImage(cell: cell, index: indexPath.row)
         return cell

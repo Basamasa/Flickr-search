@@ -10,16 +10,41 @@ import UIKit
 /// Cell view for image conllection
 class ImageCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var ImageView: UIImageView!
-    @IBOutlet weak var ImageLabel: UILabel!
+//    @IBOutlet weak var imageView: UIImageView!
+//    @IBOutlet weak var imageLa bel: UILabel!
+    var imageView = UIImageView()
+    static let identifer = "ImageCollectionViewCell"
     
     var model: ImageViewModel? {
         didSet {
             if let model = model {
-                ImageView.image = UIImage(named: "placeholder")
-                ImageView.loadImageUsingCache(withUrl: model.imageURL)
+                imageView.image = UIImage(named: "placeholder")
+                imageView.loadImageUsingCache(withUrl: model.imageURL)
             }
         }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.clipsToBounds = true
+        self.autoresizesSubviews = true
+        
+        imageView.frame = self.bounds
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.addSubview(imageView)
+        
+        // Use a random background color.
+        let redColor = CGFloat(arc4random_uniform(255)) / 255.0
+        let greenColor = CGFloat(arc4random_uniform(255)) / 255.0
+        let blueColor = CGFloat(arc4random_uniform(255)) / 255.0
+        self.backgroundColor = UIColor(red: redColor, green: greenColor, blue: blueColor, alpha: 1.0)
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+//        fatalError("init(coder:) has not been implemented")
     }
     
 }
