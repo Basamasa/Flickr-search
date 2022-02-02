@@ -32,12 +32,6 @@ class ImageCollectionViewCell: UICollectionViewCell {
         imageView.clipsToBounds = true
         imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.addSubview(imageView)
-        
-        // Use a random background color.
-        let redColor = CGFloat(arc4random_uniform(255)) / 255.0
-        let greenColor = CGFloat(arc4random_uniform(255)) / 255.0
-        let blueColor = CGFloat(arc4random_uniform(255)) / 255.0
-        self.backgroundColor = UIColor(red: redColor, green: greenColor, blue: blueColor, alpha: 1.0)
     }
     
     required init?(coder: NSCoder) {
