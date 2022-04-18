@@ -8,7 +8,7 @@
 import Foundation
 
 /// Request helper that gives results from url request
-class RequestManager: NSObject {
+class RequestManager {
     
     static let shared = RequestManager()
     
@@ -22,30 +22,32 @@ class RequestManager: NSObject {
         - request: Api request
         - completion: Handler to retrieve result
      */
-    func request(_ request: Request, completion: @escaping (Result<Data>) -> Void) {
+    func request(_ request: Request) async -> Result<Data> {
         
         guard (Reachability.currentReachabilityStatus != .notReachable) else {
-            return completion(.Failure(RequestManager.noInternetConnection))
+            return .Failure(RequestManager.noInternetConnection)
         }
         
-        URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
-            
-            guard error == nil else {
-                return completion(.Failure(error!.localizedDescription))
-            }
-            
-            guard let data = data else {
-                return completion(.Failure(error?.localizedDescription ?? RequestManager.errorMessage))
-            }
-            
-            guard let stringResponse = String(data: data, encoding: String.Encoding.utf8) else {
-                return completion(.Failure(error?.localizedDescription ?? RequestManager.errorMessage))
-            }
-            
-            print("Respone: \(stringResponse)")
-            
-            return completion(.Success(data))
-            
-        }.resume()
+        return await withCheckedContinuation { continuation in
+            URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+                
+                guard error == nil else {
+                    return continuation.resume(returning: .Failure(error!.localizedDescription))
+                }
+                
+                guard let data1 = data else {
+                    return continuation.resume(returning: .Failure(error?.localizedDescription ?? RequestManager.errorMessage))
+                }
+                
+                guard let stringResponse = String(data: data1, encoding: String.Encoding.utf8) else {
+                    return continuation.resume(returning: .Failure(error?.localizedDescription ?? RequestManager.errorMessage))
+                }
+                
+                print("Respone: \(stringResponse)")
+                
+                return continuation.resume(returning: .Success(data1))
+                
+            }.resume()
+        }
     }
 }

@@ -18,29 +18,37 @@ class FlickrAPI: NSObject {
         - pageNo: Page number
         - completion: Handler to retrieve result
      */
-    func requestText(_ searchText: String, pageNo: Int, completion: @escaping (Result<Photos?>) -> Void) {
+    func requestText(_ searchText: String, pageNo: Int) async -> Result<Photos?> {
         
-        guard let request = Routes.searchRequest(searchText: searchText, pageNo: pageNo) else {
-            return
+        guard let request1 = Routes.searchRequest(searchText: searchText, pageNo: pageNo) else {
+            return .Error("")
         }
         
-        RequestManager.shared.request(request) { (result) in
-            switch result {
-            case .Success(let responseData):
-                if let model = self.parser(responseData) {
-                    if let stat = model.stat, stat.uppercased().contains("OK") {
-                        return completion(.Success(model.photos))
-                    } else {
-                        return completion(.Failure(RequestManager.errorMessage))
-                    }
+        //        let publisher = URLSession.shared.dataTaskPublisher(for: request as URLRequest)
+        //
+        //        publisher.sink { completion in
+        //            <#code#>
+        //        } receiveValue: { value in
+        //            <#code#>
+        //        }
+        
+        let result = await RequestManager.shared.request(request1)
+        switch result {
+        case .Success(let responseData):
+            if let model = self.parser(responseData) {
+                if let stat = model.stat, stat.uppercased().contains("OK") {
+                    let photos = model.photos
+                    return .Success(photos)
                 } else {
-                    return completion(.Failure(RequestManager.errorMessage))
+                    return .Failure(RequestManager.errorMessage)
                 }
-            case .Failure(let message):
-                return completion(.Failure(message))
-            case .Error(let error):
-                return completion(.Failure(error))
+            } else {
+                return .Failure(RequestManager.errorMessage)
             }
+        case .Failure(let message):
+            return .Failure(message)
+        case .Error(let error):
+            return .Failure(error)
         }
     }
     

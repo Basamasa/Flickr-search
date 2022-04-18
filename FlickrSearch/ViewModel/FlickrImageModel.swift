@@ -22,24 +22,20 @@ class FlickrImageViewModel {
      - Parameters:
         - completion: Handler to retrieve result
      */
-    private func fetchResults(completion:@escaping () -> Void) {
-        FlickrAPI().requestText(searchText, pageNo: pageNo) { (result) in
-            DispatchQueue.main.async {
-                switch result {
-                case .Success(let results):
-                    if let result = results {
-                        self.totalPageNo = result.pages
-                        self.photos.append(contentsOf: result.photo)
-                        self.dataUpdated?()
-                    }
-                    completion()
-                case .Failure(let message):
-                    print(message)
-                    completion()
-                case .Error(let error):
-                    print(error)
-                    completion()
+    private func fetchResults() async {
+        let result = await FlickrAPI().requestText(searchText, pageNo: pageNo)
+        DispatchQueue.main.async {
+            switch result {
+            case .Success(let results):
+                if let result = results {
+                    self.totalPageNo = result.pages
+                    self.photos.append(contentsOf: result.photo)
+                    self.dataUpdated?()
                 }
+            case .Failure(let message):
+                print(message)
+            case .Error(let error):
+                print(error)
             }
         }
     }
@@ -51,10 +47,10 @@ class FlickrImageViewModel {
         - searchText: Search term
         - completion: Handler to retrieve result
      */
-    func search(text: String, completion:@escaping () -> Void) {
+    func search(text: String) async {
         searchText = text
         photos.removeAll()
-        fetchResults(completion: completion)
+        await fetchResults()
     }
     
     /**
@@ -63,14 +59,12 @@ class FlickrImageViewModel {
      - Parameters:
         - completion: Handler to retrieve result
      */
-    func fetchNextPage(completion:@escaping () -> Void) {
+    func fetchNextPage() async {
         if pageNo < totalPageNo {
             pageNo += 1
-            fetchResults {
-                completion()
-            }
+            await fetchResults()
         } else {
-            completion()
+            return
         }
     }
 }

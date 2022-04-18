@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 /// Main controller of the app
 class MainViewController: UIViewController {
@@ -14,7 +15,7 @@ class MainViewController: UIViewController {
     
     @IBOutlet weak var imageCollectionView: UICollectionView!
     
-    var suggestedTableViewController: SuggestedTableController!
+    private var suggestedTableViewController: SuggestedTableController!
             
     private var flickrViewModel = FlickrImageViewModel()
         
@@ -23,6 +24,10 @@ class MainViewController: UIViewController {
     private var preLoadingNumber: Int = 30
     
     private var loading: Bool = false
+    
+    @Published var keyStroke: String = ""
+    
+    var cancellables: Set<AnyCancellable> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +38,12 @@ class MainViewController: UIViewController {
         imageCollectionView.dataSource = self
         
         setUpSearchBar()
+        
+//        $keyStroke
+//            .receive(on: RunLoop.main)
+//            .sink { (keyWordValue) in
+//                print(keyWordValue)
+//            }.store(in: &cancellables)
         
         setUpCollectionView()
         
@@ -113,28 +124,27 @@ extension MainViewController: UISearchControllerDelegate, UISearchBarDelegate, U
         setToSuggestedSearches()
     }
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
-        loading = true
-        
-        let searchedText = searchText.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: " ", with: "+")
-        
-        if searchedText.count < 1 {
-            return
-        }
+    internal func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        Task {
+            loading = true
+            
+            let searchedText = searchText.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: " ", with: "+")
+            
+            if searchedText.count < 1 {
+                return
+            }
 
-        imageCollectionView.reloadData()
-        imageCollectionView.setContentOffset(CGPoint.zero, animated: false)
-                
-        flickrViewModel.search(text: searchedText) {
-            print("Search worked.")
+            imageCollectionView.reloadData()
+            imageCollectionView.setContentOffset(CGPoint.zero, animated: false)
+                 
+            await flickrViewModel.search(text: searchedText)
+            
+            let tempText = searchText
+            searchController.searchBar.resignFirstResponder()
+            searchController.isActive = false
+            searchController.searchBar.text = tempText
+            HistorySearch.insertHistory(text: tempText)
         }
-        
-        let tempText = searchText
-        searchController.searchBar.resignFirstResponder()
-        searchController.isActive = false
-        searchController.searchBar.text = tempText
-        HistorySearch.insertHistory(text: tempText)
     }
 }
 
@@ -172,7 +182,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    internal func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let cell = cell as? ImageCollectionViewCell else {
             return
         }
@@ -185,8 +195,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.model = ImageViewModel.init(photo: model)
         
         if indexPath.row == (flickrViewModel.photos.count - 10) {
-            flickrViewModel.fetchNextPage {
-                print("Fetched next page")
+            Task {
+                await flickrViewModel.fetchNextPage()
             }
         }
     }
