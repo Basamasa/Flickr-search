@@ -27,27 +27,15 @@ class RequestManager {
         guard (Reachability.currentReachabilityStatus != .notReachable) else {
             return .Failure(RequestManager.noInternetConnection)
         }
-        
-        return await withCheckedContinuation { continuation in
-            URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
-                
-                guard error == nil else {
-                    return continuation.resume(returning: .Failure(error!.localizedDescription))
-                }
-                
-                guard let data1 = data else {
-                    return continuation.resume(returning: .Failure(error?.localizedDescription ?? RequestManager.errorMessage))
-                }
-                
-                guard let stringResponse = String(data: data1, encoding: String.Encoding.utf8) else {
-                    return continuation.resume(returning: .Failure(error?.localizedDescription ?? RequestManager.errorMessage))
-                }
-                
-                print("Respone: \(stringResponse)")
-                
-                return continuation.resume(returning: .Success(data1))
-                
-            }.resume()
+        do {
+            let (data, _) = try await URLSession.shared.data(for: request as URLRequest)
+            
+            guard String(data: data, encoding: String.Encoding.utf8) != nil else {
+                return .Failure(RequestManager.errorMessage)
+            }
+            return .Success(data)
+        } catch {
+            return .Failure(error.localizedDescription)
         }
     }
 }
